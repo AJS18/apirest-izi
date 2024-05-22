@@ -1,0 +1,9 @@
+{
+    "env": {
+        "PG_USER": "postgres",
+        "PG_PASSWORD": "senhaBANCOIZI",
+        "DATABASE": "database1",
+        "PG_HOST": "database-1.cju4sysyizxw.us-east-2.rds.amazonaws.com",
+        "PG_PORT": 5432
+    }
+}

@@ -1,4 +1,5 @@
 const express = require('express');
+
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
@@ -7,24 +8,26 @@ const rotaProdutos = require('./rotas/produtos');
 const rotaPedidos = require('./rotas/pedidos');
 
 app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({ extended: false})); //apenas dados simples
+app.use(bodyParser.urlencoded({ extended: false })); //apenas dados simples
 app.use(bodyParser.json()); //json de entrada do body
 
-app.use((req, res, next) =>{
+app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*') //é aonde libero qual servidor pode usar a api
     res.header(
         'Access-Control-Allow-Header',
         'Origin, X-Requested-With, Content-Type', 'Accept', 'Authorization'
     ); //é aonde aceita quais cabeçalhos eu querer
 
-    if (req.method == 'OPTIONS'){
+    if (req.method == 'OPTIONS') {
         res.header('Access-Control-Allow-Methods', 'PUT, POST, PATCH, DELETE, GET');
         return res.status(200).send({});
     }
-    
+
     next();
 
 });
+
+app.use("api/v1/database1", database1Routes);
 
 app.use('/produtos', rotaProdutos);
 app.use('/pedidos', rotaPedidos);
