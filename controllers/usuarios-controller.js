@@ -22,7 +22,7 @@ exports.getUsuarios = (req, res, next) => {
                             request: {
                                 tipo: 'GET',
                                 descricao: 'Retorna os detalhes de um usuário específico',
-                                url: process.env.URL_API + 'usuarios/' + user.id
+                                url: process.env.URL_API + '/usuarios/' + user.id
                             }
                         }
                     })
@@ -57,7 +57,7 @@ exports.postUsuario = (req, res, next) => {
                             request: {
                                 tipo: 'GET',
                                 descricao: 'Retorna todos os usuários',
-                                url: process.env.URL_API + 'usuarios'
+                                url: process.env.URL_API + '/usuarios'
                             }
                         }
                     }
@@ -94,7 +94,7 @@ exports.getUmUsuario = (req, res, next) => {
                         request: {
                             tipo: 'GET',
                             descricao: 'Retorna todos os usuários',
-                            url: process.env.URL_API + 'usuarios'
+                            url: process.env.URL_API + '/usuarios'
                         }
                     }
                 }
@@ -146,7 +146,7 @@ const updateUserWithHash = (req, res, hashedPassword) => {
                         request: {
                             tipo: 'GET',
                             descricao: 'Retorna os detalhes de um usuário específico',
-                            url: process.env.URL_API + 'usuarios/' + req.body.id
+                            url: process.env.URL_API + '/usuarios/' + req.body.id
                         }
                     }
                 }
@@ -182,7 +182,7 @@ const updateUserWithoutHash = (req, res) => {
                         request: {
                             tipo: 'GET',
                             descricao: 'Retorna os detalhes de um usuário específico',
-                            url: process.env.URL_API + 'usuarios/' + req.body.id
+                            url: process.env.URL_API + '/usuarios/' + req.body.id
                         }
                     }
                 }
@@ -207,7 +207,7 @@ exports.deleteUsuario = (req, res, next) => {
                     request: {
                         tipo: 'POST',
                         descricao: 'Insere um usuário',
-                        url: process.env.URL_API + 'usuarios',
+                        url: process.env.URL_API + '/usuarios',
                         body: {
                             nome: 'String',
                             cpf: 'String',
