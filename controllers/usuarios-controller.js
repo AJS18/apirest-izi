@@ -1,5 +1,5 @@
 const mysql = require('../mysql').pool;
-const bcrypt = require('bcrypt'); // Biblioteca para hashing de senhas
+const bcrypt = require('bcryptjs'); // Biblioteca para hashing de senhas
 
 // Função para listar todos os usuários
 exports.getUsuarios = (req, res, next) => {

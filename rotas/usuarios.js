@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+
 const UsuariosController = require('../controllers/usuarios-controller');
 
 // Retorna todos os usuários
