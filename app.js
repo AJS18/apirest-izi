@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 
 const rotaProdutos = require('./rotas/produtos');
 const rotaPedidos = require('./rotas/pedidos');
+const rotaUsuarios = require('./rotas/usuarios');
+
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({ extended: true })); //apenas dados simples
@@ -29,6 +31,7 @@ app.use((req, res, next) => {
 
 app.use('/produtos', rotaProdutos);
 app.use('/pedidos', rotaPedidos);
+app.use('/usuarios', rotaUsuarios);
 
 //quando nao encontra rota, entra aqui:
 app.use((req, res, next) => {
@@ -45,6 +48,6 @@ app.use((error, req, res, next) => {
         }
     });
 });
-  
+
 
 module.exports = app;
