@@ -6,6 +6,7 @@ exports.getProdutos = (req, res, next) => {
         conn.query(
             'SELECT * FROM produtos;',
             (error, result, fields) => {
+                conn.release();
                 if (error) { console.error(error); res.status(500).send({ error: error }) }
                 const response = {
                     quantidade: result.length,
