@@ -1,5 +1,4 @@
 const express = require('express');
-
 const app = express();
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
@@ -8,7 +7,7 @@ const rotaProdutos = require('./rotas/produtos');
 const rotaPedidos = require('./rotas/pedidos');
 
 app.use(morgan('dev'));
-app.use(bodyParser.urlencoded({ extended: false })); //apenas dados simples
+app.use(bodyParser.urlencoded({ extended: true })); //apenas dados simples
 app.use(bodyParser.json()); //json de entrada do body
 
 app.use((req, res, next) => {
@@ -27,7 +26,6 @@ app.use((req, res, next) => {
 
 });
 
-app.use("api/v1/database1", database1Routes);
 
 app.use('/produtos', rotaProdutos);
 app.use('/pedidos', rotaPedidos);
@@ -47,5 +45,6 @@ app.use((error, req, res, next) => {
         }
     });
 });
+  
 
 module.exports = app;
