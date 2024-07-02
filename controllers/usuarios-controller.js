@@ -110,11 +110,124 @@ exports.updateUsuario = (req, res, next) => {
     if (req.body.senha) {
         // Se a senha for fornecida, gere um novo hash para ela
         bcrypt.hash(req.body.senha, 10, (errBcrypt, hash) => {
-            if (errBcrypt) { console.error(errBcrypt); return res.status(500).send({ error: errBcrypt }) }
+            if (errBcrypt) {
+                console.error(errBcrypt);
+                return res.status(500).send({ error: errBcrypt });
+            }
             updateUserWithHash(req, res, hash); // Chama a função de atualização com o hash gerado
         });
     } else {
         // Se a senha não for fornecida, atualize os outros campos sem alterar a senha
+        updateUserWithoutHash(req, res);
+    }
+}
+
+// Função auxiliar para atualizar o usuário com uma nova senha hash
+const updateUserWithHash = (req, res, hashedPassword) => {
+    mysql.getConnection((error, conn) => {
+        if (error) {
+            console.error(error);
+            return res.status(500).send({ error: error });
+        }
+        // Construindo a consulta SQL dinamicamente
+        const updates = {
+            nome: req.body.nome,
+            cpf: req.body.cpf,
+            senha: hashedPassword,
+            email: req.body.email,
+            cadastrador: req.body.cadastrador
+        };
+
+        const fields = Object.keys(updates).filter(key => updates[key] !== undefined);
+        const values = fields.map(key => updates[key]);
+
+        values.push(req.body.id); // Adicionando o id no final dos valores
+
+        const sql = `UPDATE usuarios SET ${fields.map(field => `${field} = ?`).join(', ')} WHERE id = ?`;
+
+        conn.query(sql, values, (error, result, field) => {
+            conn.release();
+            if (error) {
+                console.error(error);
+                return res.status(500).send({ error: error });
+            }
+            const response = {
+                mensagem: 'Usuário atualizado com sucesso',
+                usuarioAtualizado: {
+                    id: req.body.id,
+                    nome: req.body.nome,
+                    cpf: req.body.cpf,
+                    email: req.body.email,
+                    cadastrador: req.body.cadastrador,
+                    request: {
+                        tipo: 'GET',
+                        descricao: 'Retorna os detalhes de um usuário específico',
+                        url: process.env.URL_API + '/usuarios/' + req.body.id
+                    }
+                }
+            }
+            return res.status(202).send(response);
+        });
+    });
+}
+
+// Função auxiliar para atualizar o usuário sem alterar a senha
+const updateUserWithoutHash = (req, res) => {
+    mysql.getConnection((error, conn) => {
+        if (error) {
+            console.error(error);
+            return res.status(500).send({ error: error });
+        }
+        // Construindo a consulta SQL dinamicamente
+        const updates = {
+            nome: req.body.nome,
+            cpf: req.body.cpf,
+            email: req.body.email,
+            cadastrador: req.body.cadastrador
+        };
+
+        const fields = Object.keys(updates).filter(key => updates[key] !== undefined);
+        const values = fields.map(key => updates[key]);
+
+        values.push(req.body.id); // Adicionando o id no final dos valores
+
+        const sql = `UPDATE usuarios SET ${fields.map(field => `${field} = ?`).join(', ')} WHERE id = ?`;
+
+        conn.query(sql, values, (error, result, field) => {
+            conn.release();
+            if (error) {
+                console.error(error);
+                return res.status(500).send({ error: error });
+            }
+            const response = {
+                mensagem: 'Usuário atualizado com sucesso',
+                usuarioAtualizado: {
+                    id: req.body.id,
+                    nome: req.body.nome,
+                    cpf: req.body.cpf,
+                    email: req.body.email,
+                    cadastrador: req.body.cadastrador,
+                    request: {
+                        tipo: 'GET',
+                        descricao: 'Retorna os detalhes de um usuário específico',
+                        url: process.env.URL_API + '/usuarios/' + req.body.id
+                    }
+                }
+            }
+            return res.status(202).send(response);
+        });
+    });
+}
+
+/*
+// Função para atualizar um usuário
+exports.updateUsuario = (req, res, next) => {
+    if (req.body.senha) {
+        bcrypt.hash(req.body.senha, 10, (errBcrypt, hash) => {
+            if (errBcrypt) { console.error(errBcrypt); return res.status(500).send({ error: errBcrypt }) }
+            updateUserWithHash(req, res, hash);
+        });
+    } else {
         updateUserWithoutHash(req, res);
     }
 }
@@ -191,6 +304,8 @@ const updateUserWithoutHash = (req, res) => {
         )
     });
 }
+*/
+
 
 // Função para deletar um usuário
 exports.deleteUsuario = (req, res, next) => {
